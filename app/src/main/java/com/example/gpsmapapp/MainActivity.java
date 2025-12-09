@@ -1,4 +1,4 @@
-package com.example.gpsmapapp; // Asegúrate de que este sea tu paquete real
+package com.example.gpsmapapp;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -20,7 +20,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import android.annotation.SuppressLint; // Importar para la mejora de código limpio
+import android.annotation.SuppressLint;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -31,22 +31,22 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main); // Debe coincidir con tu XML (activity_main.xml)
+        setContentView(R.layout.activity_main);
 
-        // Inicializar el mapa
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.mapView); // R.id.mapView debe coincidir con el ID en tu XML
+                .findFragmentById(R.id.mapView);
         mapFragment.getMapAsync(this);
 
-        // Inicializar el cliente de ubicación
+
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-        // Iniciar la verificación de permisos
+
         checkLocationPermission();
     }
 
     private void checkLocationPermission() {
-        // 9. Configurar los permisos en tiempo de ejecución [cite: 488]
+
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
@@ -57,10 +57,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-    @SuppressLint("MissingPermission") // Mejora: Suprime la advertencia del compilador
+    @SuppressLint("MissingPermission")
     private void getCurrentLocation() {
-        // Nota: El permiso ya se chequeó en checkLocationPermission()
-        // Si el permiso no fue concedido (por algún error de lógica externa) simplemente no hará la llamada.
+
 
         fusedLocationClient.getLastLocation()
                 .addOnSuccessListener(this, new OnSuccessListener<Location>() {
@@ -76,11 +75,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     @Override
-    @SuppressLint("MissingPermission") // Mejora: Suprime la advertencia del compilador
+    @SuppressLint("MissingPermission")
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Solo habilita la capa si tenemos el permiso
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
@@ -94,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         if (requestCode == LOCATION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Si el permiso es concedido, intenta obtener la ubicación.
+
                 getCurrentLocation();
             } else {
                 Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show();
